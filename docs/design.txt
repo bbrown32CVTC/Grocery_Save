@@ -1,0 +1,218 @@
+“Grocery Save” - Design
+
+Problem Statement:
+
+There is a need to build an interactive text game where the user’s character has three bags of groceries to carry home. It will need to alert the user 
+with the storyline when the game starts. The user is then prompted three different times the direction they want to go (left, right, or straight) in 
+the storyline, which will determine if the user’s character will drop either of the three bags. Display to the user of the outcome of that choice. 
+The game is over as soon as the user’s character reaches the end of the story. It will display an output at the end of the game to show how many 
+grocery bags remain and which of the four rewards is earned. Three bags remaining will result in a gold survival reward, two bags remaining results 
+a silver survival reward, one bag remaining results in a copper survival reward, and no bags remaining will result in the starvation reward. The game
+ will start over if the user does not say “no” when asked to play again.
+
+Nouns: three bags of groceries, direction, output, four rewards, play again
+Verbs: prompted, drop, alert, display, remaining, start over
+
+Defining Diagram:
+
+Inputs:
+direction (three times)
+
+Processing:
+Alert the user of storyline
+Prompt for which direction to take three times
+Display the user’s decision result each of the three times
+Calculate remaining bags
+Set output and rewardEarned
+Display output and rewardEarned
+Prompt if the user wants to play again
+
+Outputs:
+direction
+output
+rewardEarned
+
+Pseudocode:
+Solution Algorithm:
+GrocerySave
+  DirectionToTake (direction, routeCounter)
+    Set droppedBags to 0
+    CASE OF  routeCounter
+      2: 
+        IF direction === “left”
+          Set result to 2
+          Display “You chose to juke “ + direction + “. You tripped because your shoe was untied! You had to use both hands in order to fight them off and get to safety.\n”
+        ELSE IF direction === “right”
+          Set droppedBags to 0
+          Display “You chose to juke “ + direction + “. Your juke move worked like magic! A zombie tripped and fell into the other two zombies causing them all to fall to the ground. You did not lose any grocery bags.\n”
+        ELSE 
+          Set droppedBags to 1 
+          Display “You chose to juke “ + direction + “. The zombies closed in and you had no where you could run. You lost a grocery bag during the completion of your roundhouse kick to the zombie’s chest to get away.\n”
+        ENDIF
+
+      1: 
+        IF direction === “left”
+          Set droppedBags to 0
+          Display “You chose to slide “ + direction + “. You found a baseball bat! You were able to get away after using the zombies for batting practice. The bat broke upon impact.\n”
+        ELSE IF direction === “right”
+          Set result to 1
+          Display “You chose to slide “ + direction + “. You lost a grocery bag while using it to knock down the zombie to get away.\n”
+        ELSE 
+          Set droppedBags to 0 
+          Display “You chose to slide “ + direction + “. You got away by dashing between the zombies. You did not lose any grocery bags.\n”
+        ENDIF
+
+      0: 
+        IF direction === “left”
+          Set droppedBags to 0
+          Display “You chose to go “ + direction + “. You were lucky to get away with a little bit of zombie slobber on your arm, but you did not lose any grocery bags.\n”
+        ELSE IF direction === “right”
+          Set droppedBags to 0
+          Display “You chose to go “ + direction + “. You luckily got away without being bitten! You did not lose any grocery bags. \n”
+        ELSE 
+          Set droppedBags to 1 
+          Display “You chose to go “ + direction + “. You walked right into the zombie! It nearly bit your neck while you were in its grasp. You dropped one of your grocery bags while trying to get away.\n”
+        ENDIF
+    ENDCASE
+    Return result 
+  END
+
+  CalculateRemainingBags (bagsRemoved, groceryBags)
+     Set bagsLeft to 0
+    Convert bagsRemoved to a Number
+    Convert groceryBags to a Number
+    bagsLeft = groceryBags – bagsRemoved
+    Return bagsLeft
+  END
+  
+  Main ()
+    Initialize inputDirection to “”
+    Initialize output to “”
+    Initialize rewardCount to “”
+    Initialize rewardEarned to “”
+    Initialize remainingBags to 3
+    Alert user with “Welcome to the ‘Grocery Save’ interactive zombie story game!” 
+    Display “You are on your way home with three bags of groceries during a zombie apocalypse. You will starve if you return home without any bags of groceries, so you need to choose your route home carefully. You have three tries for success. Let’s begin!”
+    LOOP starting at 0 to loopCounter in increments of 1 until equaling 3
+    CASE OF  loopCounter
+      2: Display “There are three zombies in front of your house. The only way to get away is by using your special ‘spin and juke’ sports move. You complete the spin and now you need to determine which direction to juke. ”
+      1: Display “You’re running as fast as possible and jump over a fence. Now you notice two zombies standing in the yard. They’re drooling blood and are headed towards you with their arms open. ”
+      0: Display “You see a zombie coming down the street headed directly towards you. ”
+    ENDCASE
+      Prompt for inputDirection with “Would you like to go left, right, or straight?”
+      Set inputDirection to inputDirection.toLowerCase()
+      IF inputDirection !== “left” AND inputDirection !== “right” AND inputDirection !== “straight” THEN
+        Alert user with “You did not select left, right, or straight. Please try again”
+      ELSE
+        Call DirectionToTake with inputDirection and loopCounter
+        Set rewardCount to droppedBags
+        Convert rewardCount to a Number
+        Call CalculateRemainingBags with rewardCount and remainingBags
+        Set remainingBags to bagsLeft
+        Convert remainingBags to a Number
+      ENDIF
+    ENDLOOP
+    CASE OF  remainingBags
+      3: Set rewardEarned to Gold 
+      2: Set rewardEarned to “Silver”
+      1: Set rewardEarned to “Copper”
+      0: Set rewardEarned to “Starvation” 
+      default: Set rewardEarned to “Starvation”      
+    ENDCASE
+
+    IF remainingBags > 0  AND remainingBags  !== 1 THEN
+      Set output to “Congratulations! You successfully made it home with “ + remainingBags + “ grocery bags. You earned the “ + rewardEarned + “ reward for your effort\n!”  
+    ELSE IF remainingBags === 1 THEN
+      Set output to “Congratulations! You successfully made it home with “ + remainingBags + “ grocery bag. You earned the “ + rewardEarned + “ reward for your effort\n!”    
+    ELSE
+      Set output to “Oh no! You made it home with zero bags of groceries. You earned the “ + rewardEarned + “ reward for your effort\n!” 
+    ENDIF
+  Display output
+  END
+
+  PlayGrocerySave
+    Set play to true
+    Set playAgain to “”
+    WHILE play = true
+      Call on Main()
+      Prompt for playAgain with “Would you like to play again? Input yes or no”
+      Set playAgain to playAgain. toLowerCase()
+      IF playAgain !== “yes” AND playAgain !== “no” THEN
+        Alert user with “You did not select yes or no. Please try again”
+      ELSE IF playAgain === “no” THEN
+        Set play to false
+      ENDIF 
+    ENDWHILE
+  END
+  PlayGrocerySave ()
+END
+
+Test Plans:
+
+Variables: inputDirection
+
+Test Plan 1: 
+  Input Values: left, left, left
+  Expected Result:
+  You are on your way home with three bags of groceries during a zombie apocalypse. You will starve if you return home without any bags of groceries, so you need to choose your route home carefully. You have three tries for success. Let’s begin!
+  You see a zombie coming down the street headed directly towards you. You chose to go left. You were lucky to get away with a little bit of zombie slobber on your arm, but you did not lose any grocery bags.
+  You’re running as fast as possible and jump over a fence. Now you notice two zombies standing in the yard. They’re drooling blood and are headed towards you with their arms open. You chose to slide left. You found a baseball bat! You were able to get away after using the zombies for batting practice. The bat broke upon impact.
+  There are three zombies in front of your house. The only way to get away is by using your special ‘spin and juke’ sports move. You complete the spin and now you need to determine which direction to juke. You chose to juke left. You tripped because your shoe was untied! You had to use both hands in order to fight them off and get to safety.
+  Congratulations! You successfully made it home with 1 grocery bag. You earned the Copper reward for your effort!
+
+  Actual Result:
+  You are on your way home with three bags of groceries during a zombie apocalypse. You will starve if you return home without any bags of groceries, so you need to choose your route home carefully. You have three tries for success. Let’s begin!
+  You see a zombie coming down the street headed directly towards you. You chose to go left. You were lucky to get away with a little bit of zombie slobber on your arm, but you did not lose any grocery bags.
+  You’re running as fast as possible and jump over a fence. Now you notice two zombies standing in the yard. They’re drooling blood and are headed towards you with their arms open. You chose to slide left. You found a baseball bat! You were able to get away after using the zombies for batting practice. The bat broke upon impact.
+  There are three zombies in front of your house. The only way to get away is by using your special ‘spin and juke’ sports move. You complete the spin and now you need to determine which direction to juke. You chose to juke left. You tripped because your shoe was untied! You had to use both hands in order to fight them off and get to safety.
+  Congratulations! You successfully made it home with 1 grocery bag. You earned the Copper reward for your effort!
+
+Test Plan 2: 
+  Input Values: right, right, right
+
+  Expected Result:
+  You are on your way home with three bags of groceries during a zombie apocalypse. You will starve if you return home without any bags of groceries, so you need to choose your route home carefully. You have three tries for success. Let’s begin!
+  You see a zombie coming down the street headed directly towards you. You chose to go right. You luckily got away without being bitten! You did not lose any grocery bags.
+  You’re running as fast as possible and jump over a fence. Now you notice two zombies standing in the yard. They’re drooling blood and are headed towards you with their arms open. You chose to slide right. You lost a grocery bag while using it to knock down the zombie to get away.
+  There are three zombies in front of your house. The only way to get away is by using your special ‘spin and juke’ sports move. You complete the spin and now you need to determine which direction to juke. You chose to juke right. Your juke move worked like magic! A zombie tripped and fell into the other two zombies causing them all to fall to the ground. You did not lose any grocery bags.
+  Congratulations! You successfully made it home with 2 grocery bags. You earned the Silver reward for your effort!
+
+  Actual Result:
+  You are on your way home with three bags of groceries during a zombie apocalypse. You will starve if you return home without any bags of groceries, so you need to choose your route home carefully. You have three tries for success. Let’s begin!
+  You see a zombie coming down the street headed directly towards you. You chose to go right. You luckily got away without being bitten! You did not lose any grocery bags.
+  You’re running as fast as possible and jump over a fence. Now you notice two zombies standing in the yard. They’re drooling blood and are headed towards you with their arms open. You chose to slide right. You lost a grocery bag while using it to knock down the zombie to get away.
+  There are three zombies in front of your house. The only way to get away is by using your special ‘spin and juke’ sports move. You complete the spin and now you need to determine which direction to juke. You chose to juke right. Your juke move worked like magic! A zombie tripped and fell into the other two zombies causing them all to fall to the ground. You did not lose any grocery bags.
+  Congratulations! You successfully made it home with 2 grocery bags. You earned the Silver reward for your effort!
+
+Test Plan 3: 
+  Input Values: left, right, left
+
+  Expected Result:
+  You are on your way home with three bags of groceries during a zombie apocalypse. You will starve if you return home without any bags of groceries, so you need to choose your route home carefully. You have three tries for success. Let’s begin!
+  You see a zombie coming down the street headed directly towards you. You chose to go left. You were lucky to get away with a little bit of zombie slobber on your arm, but you did not lose any grocery bags.
+  You’re running as fast as possible and jump over a fence. Now you notice two zombies standing in the yard. They’re drooling blood and are headed towards you with their arms open. You chose to slide right. You lost a grocery bag while using it to knock down the zombie to get away.
+  There are three zombies in front of your house. The only way to get away is by using your special ‘spin and juke’ sports move. You complete the spin and now you need to determine which direction to juke. You chose to juke left. You tripped because your shoe was untied! You had to use both hands in order to fight them off and get to safety.
+  Oh no! You made it home with zero bags of groceries. You earned the Starvation reward for your effort!
+
+  Actual Result:
+  You are on your way home with three bags of groceries during a zombie apocalypse. You will starve if you return home without any bags of groceries, so you need to choose your route home carefully. You have three tries for success. Let’s begin!
+  You see a zombie coming down the street headed directly towards you. You chose to go left. You were lucky to get away with a little bit of zombie slobber on your arm, but you did not lose any grocery bags.
+  You’re running as fast as possible and jump over a fence. Now you notice two zombies standing in the yard. They’re drooling blood and are headed towards you with their arms open. You chose to slide right. You lost a grocery bag while using it to knock down the zombie to get away.
+  There are three zombies in front of your house. The only way to get away is by using your special ‘spin and juke’ sports move. You complete the spin and now you need to determine which direction to juke. You chose to juke left. You tripped because your shoe was untied! You had to use both hands in order to fight them off and get to safety.
+  Oh no! You made it home with zero bags of groceries. You earned the Starvation reward for your effort!
+
+Test Plan 4: 
+  Input Values: left, straight, right
+  Expected Result:
+  You are on your way home with three bags of groceries during a zombie apocalypse. You will starve if you return home without any bags of groceries, so you need to choose your route home carefully. You have three tries for success. Let’s begin!
+  You see a zombie coming down the street headed directly towards you. You chose to go left. You were lucky to get away with a little bit of zombie slobber on your arm, but you did not lose any grocery bags.
+  You’re running as fast as possible and jump over a fence. Now you notice two zombies standing in the yard. They’re drooling blood and are headed towards you with their arms open. You chose to slide straight. You got away by dashing between the zombies. You did not lose any grocery bags.
+  There are three zombies in front of your house. The only way to get away is by using your special ‘spin and juke’ sports move. You complete the spin and now you need to determine which direction to juke. You chose to juke right. Your juke move worked like magic! A zombie tripped and fell into the other two zombies causing them all to fall to the ground. You did not lose any grocery bags.
+  Congratulations! You successfully made it home with 3 grocery bags. You earned the Gold reward for your effort!
+
+  Actual Result:
+  You are on your way home with three bags of groceries during a zombie apocalypse. You will starve if you return home without any bags of groceries, so you need to choose your route home carefully. You have three tries for success. Let’s begin!
+  You see a zombie coming down the street headed directly towards you. You chose to go left. You were lucky to get away with a little bit of zombie slobber on your arm, but you did not lose any grocery bags.
+  You’re running as fast as possible and jump over a fence. Now you notice two zombies standing in the yard. They’re drooling blood and are headed towards you with their arms open. You chose to slide straight. You got away by dashing between the zombies. You did not lose any grocery bags.
+  There are three zombies in front of your house. The only way to get away is by using your special ‘spin and juke’ sports move. You complete the spin and now you need to determine which direction to juke. You chose to juke right. Your juke move worked like magic! A zombie tripped and fell into the other two zombies causing them all to fall to the ground. You did not lose any grocery bags.
+  Congratulations! You successfully made it home with 3 grocery bags. You earned the Gold reward for your effort!
